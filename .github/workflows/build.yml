@@ -1,4 +1,4 @@
-# Modified from https://github.com/msys2/setup-msys2/blob/main/examples/cmake.yml
+
 name: build
 
 on:
@@ -16,11 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - { icon: '🟠', sys: clang32 }
           - { icon: '⚫', sys: mingw32 }
-          # - { icon: '🟦', sys: mingw64 }
-          # - { icon: '🟨', sys: ucrt64  }
-          # - { icon: '🟧', sys: clang64 }
     name: 🚧${{ matrix.icon }} ${{ matrix.sys }}
     defaults:
       run:
@@ -48,12 +44,6 @@ jobs:
           make
           texinfo
           texinfo-tex
-        # pacboy: >-
-        #   texlive-bin:p
-        #   texlive-core:p
-        #   texlive-plain-generic:p
-        #   texlive-fonts-recommended:p
-        #   toolchain:p
 
     - name: 'Test Setup'
       if: steps.cache-numdiff.outputs.cache-hit != 'true'
@@ -74,9 +64,6 @@ jobs:
         ../configure --disable-nls --prefix $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")
         make -j2
         make install
-        # cp $(which libgmp-10.dll)  $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")/bin/.
-        # cp $(which libiconv-2.dll) $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")/bin/.
-        # cp $(which libintl-8.dll)  $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")/bin/.
         ldd $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")/bin/numdiff.exe
         cp $(which msys-2.0.dll)  $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")/bin/.
         ldd $(cygpath "${{ runner.workspace }}/${{ matrix.sys }}/${{ matrix.sys }}")/bin/msys-2.0.dll
